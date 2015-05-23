@@ -5,15 +5,15 @@
 <body>
   <h1>Welcome to Lulu's Luvies!</h1>
   {{#if currentUser}}
+  <button class="userEditPosts">Toggle Edit</button>
+  {{#with userEditPosts}}
   <form class="new-post">
     <label name="title">Title
       <input name="title" type="text" required="true" placeholder="Enter a title" />
     </label>
-    <label name="content">Content
-      <textarea name="content" required="true"></textarea>
-    </label>
     <input type="submit" value="Create" />
   </form>
+  {{/with}}
   {{/if}}
   <ul>
     {{#each posts}}
@@ -26,9 +26,30 @@
 
 <template name="post">
   <li>
-    <h3>{{title}}</h3>
+    <h2>{{title}}</h2>
       <div class="post-content">
-        {{content}}
+        {{#each sections}}
+          <div class="section">
+            {{this}}
+          </div>
+        {{/each}}
+        {{#if currentUser}}
+          {{> editPost}}
+        {{/if}}
       </div>
   </li>
+</template>
+<template name="editPost">
+  {{#with userEditPosts}}
+  <div class="hidden">
+    <h3>Edit</h3>
+    <form class="edit-post">
+      <input type="hidden" value="{{_id}}" name="postId" />
+      <label name="section">Section
+        <textarea name="section" required="true"></textarea>
+      </label>
+      <input type="submit" value="Add" />
+    </form>
+  </div>
+  {{/with}}
 </template>

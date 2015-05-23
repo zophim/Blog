@@ -12,16 +12,35 @@ if (Meteor.isClient) {
   Template.body.events({
     "submit .new-post": function (event) {
       var title = event.target.title.value;
-      var content = event.target.content.value;
 
-      Meteor.call("addPost", title, content);
+      Meteor.call("addPost", title);
 
       event.target.title.value = "";
-      event.target.content.value = "";
 
       return false;
+    },
+    "submit .edit-post": function (event) {
+      var section = event.target.section.value;
+      var postId = event.target.postId.value;
+      Meteor.call("addSectionToPost", postId, section);
+
+      event.target.section.value = "";
+
+      return false;
+    },
+    "click .userEditPosts": function (event) {
+      Session.set("userEditPosts", ! Session.get("userEditPosts"));
     }
   });
+  Session.set("userEditPosts", false);
+
+  Template.body.userEditPosts = function() {
+    return Session.get('userEditPosts');
+  };
+
+  Template.editPost.userEditPosts = function() {
+    return Session.get('userEditPosts');
+  };
 
   Accounts.ui.config({
     passwordSignupFields: "EMAIL_ONLY"
@@ -31,7 +50,7 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Meteor.startup(function () {
     Meteor.publish("posts", function () {
-      return Posts.find({});
+      return Posts.find({}, { sort: { createdAt: -1 }});
     });
   });
 }
@@ -47,5 +66,13 @@ Meteor.methods({
       createdAt: new Date(),
       owner: Meteor.userId()
     });
+  },
+  addSectionToPost: function (postId, section) {
+    if (! Meteor.userId()) {
+      throw new Meteor.Error("not-authorized");
+    }
+    content = { "sections": section};
+
+    Posts.update(postId, { "$push": content });
   }
 });
