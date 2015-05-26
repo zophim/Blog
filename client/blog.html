@@ -1,0 +1,34 @@
+<head>
+  <title>Lulu's Luvies</title>
+</head>
+
+<body>
+  <h1>Welcome to Lulu's Luvies!</h1>
+  {{#if currentUser}}
+  <form class="new-post">
+    <label name="title">Title
+      <input name="title" type="text" required="true" placeholder="Enter a title" />
+    </label>
+    <label name="content">Content
+      <textarea name="content" required="true"></textarea>
+    </label>
+    <input type="submit" value="Create" />
+  </form>
+  {{/if}}
+  <ul>
+    {{#each posts}}
+      {{> post}}
+    {{/each}}
+  </ul>
+  {{> loginButtons}}
+
+</body>
+
+<template name="post">
+  <li>
+    <h3>{{title}}</h3>
+      <div class="post-content">
+        {{content}}
+      </div>
+  </li>
+</template>
