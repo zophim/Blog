@@ -5,15 +5,7 @@
 <body>
   <h1>Welcome to Lulu's Luvies!</h1>
   {{#if currentUser}}
-  <form class="new-post">
-    <label name="title">Title
-      <input name="title" type="text" required="true" placeholder="Enter a title" />
-    </label>
-    <label name="content">Content
-      <textarea name="content" required="true"></textarea>
-    </label>
-    <input type="submit" value="Create" />
-  </form>
+    {{> createPost}}
   {{/if}}
   <ul>
     {{#each posts}}
@@ -28,7 +20,20 @@
   <li>
     <h3>{{title}}</h3>
       <div class="post-content">
-        {{content}}
+        {{{content}}}
       </div>
   </li>
+</template>
+<template name="createPost">
+  <form class="new-post">
+    <label name="title">Title
+      <input name="title" type="text" required="true" placeholder="Enter a title" />
+    </label>
+    <label name="content">Content
+      <div id="summernote" name="content" required="true"></div>
+    </label>
+    <input type="submit" value="Create" />
+  </form>
+</template>
+<template name="blog">
 </template>

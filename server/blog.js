@@ -1,19 +1,17 @@
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    Meteor.publish("posts", function () {
-      return Posts.find({});
-    });
+Meteor.startup(function () {
+  Meteor.publish("posts", function () {
+    return Posts.find({});
   });
-}
+});
 
 Meteor.methods({
-  addPost: function (title, content) {
+  addPost: function (post) {
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
     }
     Posts.insert({
-      title: title,
-      content: content,
+      title: post.title,
+      content: post.content,
       createdAt: new Date(),
       owner: Meteor.userId()
     });
